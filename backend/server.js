@@ -1,16 +1,19 @@
 import express from 'express';
-import sql, { ConnectionPool } from 'mssql';
+import sql from 'mssql';
 
 const app = express();
 
 const config = {
-  user: 'your-username',
-  password: 'your-password',
-  server: 'your-server-address',
-  database: 'your-database-name',
+  user: 'sa',
+  password: 'sa',
+  server: 'TAHABOY',
+  database: 'TestDb',
+  options: {
+    trustServerCertificate: true, // Accept self-signed certificate
+  },
 };
 
-const pool = new ConnectionPool(config);
+const pool = new sql.ConnectionPool(config);
 const poolConnect = pool.connect();
 
 poolConnect.then((pool) => {
@@ -20,7 +23,7 @@ poolConnect.then((pool) => {
 app.get('/api/data', async (req, res) => {
   try {
     const request = new sql.Request(pool);
-    const result = await request.query('SELECT * FROM your_table');
+    const result = await request.query('SELECT * FROM CATEGORY');
     res.json(result.recordset);
   } catch (err) {
     console.error(err);
